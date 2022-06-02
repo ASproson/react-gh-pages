@@ -2,8 +2,9 @@
 
 GitHub pages is awesome! But it's also a little confusing for React apps and many guides online are a bit convoluted, so here's my guide. I'm assuming you have already created your repo on GitHub and made your React app, and are now looking to deploy it to a live website
 
-1. ```npm install gh-pages — save-dev```
-2. Open package.json and below "name" and "version" at the top, press enter and a new key:value named homepage with a link to your repo using github.io like so:
+1. First open up your project terminal and paste in this command ```npm install gh-pages — save-dev```
+
+2. Open package.json in the project and below "name" and "version" at the top, press enter and a new key:value named homepage with a link to your repo using github.io like so:
 
 ```JavaScript
 {
@@ -15,7 +16,9 @@ GitHub pages is awesome! But it's also a little confusing for React apps and man
 }
 ```
 
-Note specifically ```"homepage": "https://ASproson.github.io/tailwind-product-page",```. Here you want to replace ASproson with your specific GitHub name, then, you want to replace tailwind-product-page with the name of your repo on GitHub
+Note specifically ***```"homepage": "https://ASproson.github.io/tailwind-product-page",```***
+
+Here you want to replace **ASproson** with your specific GitHub name, then, you want to replace **tailwind-product-page** with the name of your repo on GitHub
 
 3. Still within package.json find the "scripts" key:value and add a new entry called predeploy and deploy, it should look exactly like this:
 
@@ -30,7 +33,7 @@ Note specifically ```"homepage": "https://ASproson.github.io/tailwind-product-pa
   },
 ```
 
-4. Lastly, push all of these changes upto GitHub and then we need to go to the terminal and run the command:
+4. Lastly, push all of these changes upto GitHub, and then go to the terminal and run this command:
 
 ```npm run deploy```
 
