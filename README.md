@@ -45,6 +45,15 @@ With that, go back to your repo main page and click the cog in the top right cor
 
 All of the above, except that we now need to make use of a GitHub workflow to ensure our site is properly built and deployed
 
+Note that the scripts change slightly:
+
+```JSON
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+```
+
+Deploy must now point to `dist` rather than `build`
+
 1. In the root directory create a `github` directory with another directory named `workflows` inside of it
 
 2. Create a `deploy.yml` file and paste the below exactly:
