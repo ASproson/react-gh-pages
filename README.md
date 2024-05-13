@@ -40,3 +40,83 @@ Here you want to replace **ASproson** with your specific GitHub name, then, you 
 This will take a few minutes to resolve and deploy on GitHub. Go into your repo and above the Languages section you will see something called Environments - you will now see that github-pages is listed. Click on this link, then click 'View deployment' to get the link to your hosted website. 
 
 With that, go back to your repo main page and click the cog in the top right corner of the About section and paste the web link in and we're done!
+
+# Deploying with Vite via GitHub Pages
+
+All of the above, except that we now need to make use of a GitHub workflow to ensure our site is properly built and deployed
+
+1. In the root directory create a `github` directory with another directory named `workflows` inside of it
+
+2. Create a `deploy.yml` file and paste the below exactly:
+
+```yml
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-files
+          path: ./dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+
+```
+
+3. Now we need to ensure our `vite.config.ts` has a `base` property. The `base` in this instance is the name of your repository, it should look something like this:
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  base: "/pixel_perfect/",
+});
+```
+
+4. Commit and push the changes, and run `npm run deploy` one more time
+
+If you have issues, ensure your permissions inside of GitHub allow workflows read and write
