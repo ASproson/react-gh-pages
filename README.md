@@ -43,89 +43,30 @@ With that, go back to your repo main page and click the cog in the top right cor
 
 # Deploying with Vite via GitHub Pages
 
-All of the above, except that we now need to make use of a GitHub workflow to ensure our site is properly built and deployed
+> `npm create vite@latest`
 
-Note that the scripts change slightly:
+> `npm install gh-pages --save-dev`
+
+Adjust the `package.json` scripts to point the deploy to the `dist` folder rather than the `build` folder
 
 ```JSON
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+"scripts": {
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist",
+}
 ```
 
-Deploy must now point to `dist` rather than `build`
+Inside of `vite.config.ts` we need to ensure that the `base` field is identical to the repo name:
 
-1. In the root directory create a `github` directory with another directory named `workflows` inside of it
-
-2. Create a `deploy.yml` file and paste the below exactly:
-
-```yml
-name: Deploy
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
-
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
-      - name: Build project
-        run: npm run build
-
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-
-```
-
-3. Now we need to ensure our `vite.config.ts` has a `base` property. The `base` in this instance is the name of your repository, it should look something like this:
-
-```typescript
+```TypeScript
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/pixel_perfect/",
+  base: "/css_pixel_perfect/",
 });
 ```
 
-4. Commit and push the changes, and run `npm run deploy` one more time
-
-If you have issues, ensure your permissions inside of GitHub allow workflows read and write
+Once it is all pushed to GitHub trigger: `npm run deploy` to deploy the current main branch to GitHug Pages
