@@ -73,7 +73,7 @@ Once it is all pushed to GitHub trigger: `npm run deploy` to deploy the current 
 
 If using React Router Dom then we need to mirror the changes in `vite.config.ts` inside of `main.tsx` so that the links append from the parent (base):
 
-```TypeScript
+```TSX
 // main.tsx
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
