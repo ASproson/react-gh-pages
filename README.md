@@ -70,3 +70,27 @@ export default defineConfig({
 ```
 
 Once it is all pushed to GitHub trigger: `npm run deploy` to deploy the current main branch to GitHug Pages
+
+If using React Router Dom then we need to mirror the changes in `vite.config.ts` inside of `main.tsx` so that the links append from the parent (base):
+
+```TypeSript
+// main.tsx
+
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+const router = createBrowserRouter([
+  {
+    path: "/css_pixel_perfect", <-- Note the base parent ref
+    element: <App />,
+  },
+  {
+    path: "/css_pixel_perfect/fox", <-- And the append here
+    element: <FoxUmbrellas />,
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
+```
