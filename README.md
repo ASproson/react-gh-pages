@@ -47,6 +47,8 @@ With that, go back to your repo main page and click the cog in the top right cor
 
 > `npm install gh-pages --save-dev`
 
+> `npm install --save-dev @types/babel__generator @types/babel__template @types/babel__traverse @types/prop-types`
+
 Adjust the `package.json` scripts to point the deploy to the `dist` folder rather than the `build` folder
 
 ```JSON
